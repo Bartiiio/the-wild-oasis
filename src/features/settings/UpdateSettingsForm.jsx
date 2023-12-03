@@ -19,7 +19,6 @@ function UpdateSettingsForm() {
    const { updateSettings, isUpdating } = useEditSettings();
 
    function handleupdate(e, field) {
-      console.log(field);
       const { value } = e.target;
 
       if (!value) return;
