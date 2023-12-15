@@ -8,7 +8,6 @@ import {
 } from "react-icons/hi2";
 
 function Stats({ bookings, confirmedStays, numDays, cabinCount }) {
-   console.log(cabinCount, numDays);
    const numBooking = bookings.length;
    const checkins = confirmedStays.length;
    const sales = bookings.reduce((acc, cur) => acc + cur.totalPrice, 0);
