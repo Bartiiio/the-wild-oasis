@@ -18,7 +18,11 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
 
 const queryClient = new QueryClient({
-   defaultOptions: { queries: { staleTime: 0 } },
+   defaultOptions: {
+      queries: {
+         staleTime: 0,
+      },
+   },
 });
 
 function App() {
