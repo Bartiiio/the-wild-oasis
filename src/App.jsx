@@ -33,7 +33,6 @@ function App() {
             <GlobalStyles />
             <BrowserRouter>
                <Routes>
-                  <Route path="login" element={<Login />} />
                   <Route
                      element={
                         <ProtectedRoute>
@@ -55,6 +54,7 @@ function App() {
                      <Route path="account" element={<Account />} />
                   </Route>
 
+                  <Route path="login" element={<Login />} />
                   <Route path="*" element={<PageNotFound />} />
                </Routes>
             </BrowserRouter>
