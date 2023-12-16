@@ -44,10 +44,12 @@ function CabinTable() {
       <Menus>
          <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
             <Table.Header>
+               <div></div>
                <div>Cabins</div>
                <div>Capacity</div>
                <div>Price</div>
                <div>Discout</div>
+               <div></div>
             </Table.Header>
 
             <Table.Body
