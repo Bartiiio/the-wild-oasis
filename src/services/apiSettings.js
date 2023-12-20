@@ -26,3 +26,10 @@ export async function updateSetting(newSetting) {
    }
    return data;
 }
+
+export async function getBreakfastPrice() {
+   let { data: breakfastPrice } = await supabase
+      .from("settings")
+      .select("breakfastPrice");
+   return { breakfastPrice };
+}

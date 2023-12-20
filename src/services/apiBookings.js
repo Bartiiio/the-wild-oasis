@@ -127,3 +127,18 @@ export async function deleteBooking(id) {
    }
    return data;
 }
+
+export async function addBooking({ finalBookings }) {
+   const { error } = await supabase.from("bookings").insert(finalBookings);
+   if (error) console.log(error.message);
+}
+
+export async function getAllBookings() {
+   let { data: allBookings } = await supabase.from("bookings").select("*");
+   return { allBookings };
+}
+
+export async function getAllGuests() {
+   let { data: guests } = await supabase.from("guests").select("*");
+   return { guests };
+}
