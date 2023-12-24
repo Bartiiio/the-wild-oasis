@@ -30,7 +30,7 @@ function UpdateSettingsForm() {
 
    return (
       <Form>
-         <FormRow label="Minimum nights/booking">
+         <FormRow label="Minimum nights/booking" disable={isUpdating}>
             <Input
                type="number"
                id="min-nights"
