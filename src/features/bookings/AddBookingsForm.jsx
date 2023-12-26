@@ -5,8 +5,6 @@ import styled from "styled-components";
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
-import Checkbox from "../../ui/Checkbox";
-import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useAddBooking, useGetAllBookings } from "./useAddBooking";
 import { isFuture, isPast, isToday } from "date-fns";
@@ -15,6 +13,7 @@ import { subtractDates } from "../../utils/helpers";
 import { useBreakfastPrice } from "./useBreakfastPrice";
 import { useGetAllGuests } from "./useAddBooking";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 const FormRow = styled.div`
    display: grid;
@@ -46,11 +45,11 @@ const FormRow = styled.div`
 const StyledSelect = styled.select`
    padding: 10px;
    font-size: 16px;
-   border: 1px solid var(--color-grey-200); /* Użyj koloru zdefiniowanego w :root */
+   border: 1px solid var(--color-grey-200);
    border-radius: 4px;
    margin-top: 5px;
-   background-color: var(--color-grey-0); /* Tło */
-   color: var(--color-grey-700); /* Kolor tekstu */
+   background-color: var(--color-grey-0);
+   color: var(--color-grey-700);
 `;
 
 const StyledCheckbox = styled.div`
@@ -82,21 +81,17 @@ const Label = styled.label`
    font-weight: 500;
 `;
 
-const Error = styled.span`
-   font-size: 1.4rem;
-   color: var(--color-red-700);
-`;
-
 function AddBookingsForm({ onCloseModal }) {
-   const { register, handleSubmit, reset } = useForm();
+   const [maxCapacity, setMaxCapacity] = useState(0);
+   const { register, handleSubmit, reset, watch } = useForm();
 
-   const { addNewBooking, isAddingBooking } = useAddBooking();
+   const { addNewBooking } = useAddBooking();
 
    const { allBookings = {} } = useGetAllBookings();
 
    const allbookings = allBookings ? allBookings.allBookings : [];
 
-   const { cabins: allCabins = [] } = useCabins() || {};
+   const { cabins: allCabins = [] } = useCabins();
 
    const { breakfastPrice = {} } = useBreakfastPrice();
 
@@ -106,7 +101,17 @@ function AddBookingsForm({ onCloseModal }) {
 
    const breakfast = breakfastPrice;
 
+   const watchCabinId = watch("cabinId");
+
    const price = breakfast?.breakfastPrice?.[0]?.breakfastPrice;
+
+   useEffect(() => {
+      const max = allCabins.find((cabin) => cabin.id === watchCabinId);
+
+      if (!max) return;
+
+      setMaxCapacity(max.maxCapacity);
+   }, [watchCabinId, allCabins]);
 
    function isCabinAvailable(cabinId, startDate, endDate, allBookings) {
       const overlappingBooking = allbookings.find((booking) => {
@@ -180,7 +185,6 @@ function AddBookingsForm({ onCloseModal }) {
             totalPrice,
             status,
          };
-         console.log(finalBookings);
          addNewBooking(
             { finalBookings },
             {
@@ -260,12 +264,18 @@ function AddBookingsForm({ onCloseModal }) {
 
          <FormRow>
             <Label htmlFor="discount">Number of Guests</Label>
-            <Input
-               type="number"
+
+            <StyledSelect
                id="numGuests"
-               defaultValue={0}
                {...register("numGuests", { valueAsNumber: true })}
-            />
+            >
+               <option value={0}>Select number of guests</option>
+               {Array.from({ length: maxCapacity }, (_, index) => (
+                  <option key={index + 1} value={index + 1}>
+                     {index + 1}
+                  </option>
+               ))}
+            </StyledSelect>
          </FormRow>
 
          <FormRow>
